@@ -3,12 +3,56 @@ var gameBoard = [
   [0,2,1,1,1,1,1,1,1,0],
   [0,1,0,0,0,1,0,0,1,0],
   [0,1,0,1,1,1,1,0,1,0],
-  [0,1,0,1,1,1,1,0,1,0],
+  [0,1,0,1,1,1,1,1,1,0],
   [0,1,0,0,0,0,0,0,1,0],
   [0,0,0,0,0,0,0,0,0,0]
 ]
 
+// BUILD GHOST OBJECT
+// WRITE GHOST MOVEMENT FUNCTION
+// GENERATE RANDOM VALUE (LEFT, RIGHT, TOP, BOTTOM)
+
 var score = 0;
+
+var ghost = {
+  x: 7,
+  y: 4
+}
+
+setInterval(moveGhost,750)
+
+function moveGhost(){
+  var randomVal = Math.floor(Math.random()*4 + 1)
+  console.log(randomVal)
+  gameBoard[ghost.y][ghost.x] = 3;
+  switch(randomVal) {
+    case 1:
+      if(gameBoard[ghost.y][ghost.x-1] !== 0){
+        ghost.x-=1;
+      }
+      break;
+    case 2:
+      if(gameBoard[ghost.y-1][ghost.x] !== 0){
+        ghost.y-=1;
+      }
+      break;
+    case 3:
+      if(gameBoard[ghost.y][ghost.x+1] !== 0){
+        ghost.x+=1;
+      }
+      break;
+    case 4:
+      if(gameBoard[ghost.y+1][ghost.x] !== 0){
+        ghost.y+=1;
+      }
+      break;
+  }
+  gameBoard[ghost.y][ghost.x] = 4;
+  drawBoard()
+
+}
+
+moveGhost()
 
 var pacman = {
   x: 1,
@@ -37,11 +81,10 @@ $(document).keydown(function(event){
     console.log(score)
   }
   gameBoard[pacman.y][pacman.x] = 2;
+
   drawBoard()
 
 })
-
-
 
 function drawBoard() {
   var HTMLstring = '';
@@ -64,6 +107,9 @@ function drawBoard() {
         case 3:
           divClass = 'empty'
           break;
+        case 4:
+          divClass = 'ghost'
+          break;
         default:
           console.log('No case found.')
       }
@@ -72,10 +118,7 @@ function drawBoard() {
     HTMLstring += "</div>"
   }
 
-  if(score === 10){
-    $('.scoreboard h1 span').text("YOU WON!!!")
-    alert('you won!')
-  }
+
   $('.scoreboard h1 span').text(score)
   $('.game').html(HTMLstring)
 }

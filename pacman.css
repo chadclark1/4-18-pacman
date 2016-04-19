@@ -45,3 +45,8 @@
   background-image: url('pacman.gif');
   background-size: 20px 20px;
 }
+
+.ghost {
+  background-image: url('ghost.gif');
+  background-size: 20px 20px;
+}
