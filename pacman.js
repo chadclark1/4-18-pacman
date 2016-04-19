@@ -14,30 +14,32 @@ var pacman = {
 }
 
 $(document).keydown(function(event){
-
-  gameBoard[pacman.y][pacman.x] = 3;
-
-  switch(event.which){
-    case 37:
-      pacman.x -= 1;
-      break;
-    case 38:
-      pacman.y -= 1;
-      break;
-    case 39:
-      pacman.x += 1;
-      break;
-    case 40:
-      pacman.y += 1;
-      break;
-    default:
-      console.log('No arrow key pressed');
+  // if(event.which === 39  gameBoard[pacman.y][pacman.x + 1] !== 0){
+  //   console.log('he can move')
+  // }
+  if(event.which === 37 && gameBoard[pacman.y][pacman.x - 1] !== 0){
+    gameBoard[pacman.y][pacman.x] = 3
+    pacman.x -= 1;
+  }
+  else if (event.which === 38 && gameBoard[pacman.y-1][pacman.x] !== 0) {
+    gameBoard[pacman.y][pacman.x] = 3
+    pacman.y -= 1;
+  }
+  else if (event.which === 39 && gameBoard[pacman.y][pacman.x+1] !== 0) {
+    gameBoard[pacman.y][pacman.x] = 3
+    pacman.x += 1;
+  }
+  else if (event.which === 40 && gameBoard[pacman.y+1][pacman.x] !== 0) {
+    gameBoard[pacman.y][pacman.x] = 3
+    pacman.y += 1;
   }
 
   gameBoard[pacman.y][pacman.x] = 2;
   drawBoard()
 
 })
+
+
 
 function drawBoard() {
   var HTMLstring = '';
