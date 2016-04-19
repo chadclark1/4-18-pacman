@@ -8,15 +8,14 @@ var gameBoard = [
   [0,0,0,0,0,0,0,0,0,0]
 ]
 
+var score = 0;
+
 var pacman = {
   x: 1,
   y: 1
 }
 
 $(document).keydown(function(event){
-  // if(event.which === 39  gameBoard[pacman.y][pacman.x + 1] !== 0){
-  //   console.log('he can move')
-  // }
   if(event.which === 37 && gameBoard[pacman.y][pacman.x - 1] !== 0){
     gameBoard[pacman.y][pacman.x] = 3
     pacman.x -= 1;
@@ -33,7 +32,10 @@ $(document).keydown(function(event){
     gameBoard[pacman.y][pacman.x] = 3
     pacman.y += 1;
   }
-
+  if(gameBoard[pacman.y][pacman.x] === 1){
+    score = score + 1;
+    console.log(score)
+  }
   gameBoard[pacman.y][pacman.x] = 2;
   drawBoard()
 
@@ -70,6 +72,11 @@ function drawBoard() {
     HTMLstring += "</div>"
   }
 
+  if(score === 10){
+    $('.scoreboard h1 span').text("YOU WON!!!")
+    alert('you won!')
+  }
+  $('.scoreboard h1 span').text(score)
   $('.game').html(HTMLstring)
 }
 
