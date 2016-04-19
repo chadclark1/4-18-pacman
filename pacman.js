@@ -8,56 +8,67 @@ var gameBoard = [
   [0,0,0,0,0,0,0,0,0,0]
 ]
 
-// BUILD GHOST OBJECT
-// WRITE GHOST MOVEMENT FUNCTION
-// GENERATE RANDOM VALUE (LEFT, RIGHT, TOP, BOTTOM)
-
 var score = 0;
 
 var ghost = {
-  x: 7,
-  y: 4
+  x: 8,
+  y: 5,
+  top: 260,
+  left: 160
 }
-
-setInterval(moveGhost,750)
-
-function moveGhost(){
-  var randomVal = Math.floor(Math.random()*4 + 1)
-  console.log(randomVal)
-  gameBoard[ghost.y][ghost.x] = 3;
-  switch(randomVal) {
-    case 1:
-      if(gameBoard[ghost.y][ghost.x-1] !== 0){
-        ghost.x-=1;
-      }
-      break;
-    case 2:
-      if(gameBoard[ghost.y-1][ghost.x] !== 0){
-        ghost.y-=1;
-      }
-      break;
-    case 3:
-      if(gameBoard[ghost.y][ghost.x+1] !== 0){
-        ghost.x+=1;
-      }
-      break;
-    case 4:
-      if(gameBoard[ghost.y+1][ghost.x] !== 0){
-        ghost.y+=1;
-      }
-      break;
-  }
-  gameBoard[ghost.y][ghost.x] = 4;
-  drawBoard()
-
-}
-
-moveGhost()
 
 var pacman = {
   x: 1,
   y: 1
 }
+// setInterval(moveGhost,750)
+
+function moveGhost(){
+  var randomVal = Math.floor(Math.random()*4 + 1),
+      x = ghost.x,
+      y = ghost.y,
+      left = ghost.left,
+      top = ghost.top
+
+  console.log('rand',randomVal)
+  switch(randomVal) {
+    case 1:
+      x-=1
+      left -= 20
+      break;
+    case 2:
+      y-=1
+      top -= 20
+      break;
+    case 3:
+      x+=1
+      left += 20
+      break;
+    case 4:
+      y+=1
+      top +=20
+      break;
+  }
+  if(canGhostMove(x,y)){
+    ghost.x = x;
+    ghost.y = y;
+    ghost.top = top;
+    ghost.left = left
+    $('.ghost').offset({top: ghost.top, left: ghost.left})
+  }
+  if(ghost.x===pacman.x && ghost.y === pacman.y){
+    console.log('LOSE!')
+    $('.scoreboard h1').text('YOU LOSE!')
+    alert('You Lose!')
+  }
+}
+
+function canGhostMove(x,y){
+  console.log('x,y',x,y)
+  console.log('gameBoardval:',gameBoard[y][x])
+  return (gameBoard[y][x] !== 0) ? true : false
+}
+
 
 $(document).keydown(function(event){
   if(event.which === 37 && gameBoard[pacman.y][pacman.x - 1] !== 0){
@@ -81,9 +92,7 @@ $(document).keydown(function(event){
     console.log(score)
   }
   gameBoard[pacman.y][pacman.x] = 2;
-
   drawBoard()
-
 })
 
 function drawBoard() {
@@ -117,12 +126,11 @@ function drawBoard() {
     }
     HTMLstring += "</div>"
   }
-
-
   $('.scoreboard h1 span').text(score)
   $('.game').html(HTMLstring)
 }
 
 $(document).ready(function(){
   drawBoard()
-})
+  setInterval(moveGhost, 500)
+});
